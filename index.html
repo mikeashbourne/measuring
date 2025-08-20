@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measurement Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: #0f172a;
+            line-height: 1.5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 1em;
+        }
+
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px;
+        }
+
+        .converter-section {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            background: #ffffff;
+        }
+
+        .converter-section h3 {
+            color: #374151;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .converter-row {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .output-section {
+            padding-top: 16px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.875em;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        input, select {
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1em;
+            background: #ffffff;
+            color: #0f172a;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px #3b82f6;
+        }
+
+        .result-input {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+            
+            .calculator {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.75em;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1199px) {
+            .calculator {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Measurement Calculator</h1>
+            <p>Convert between different units of measurement</p>
+        </div>
+
+        <div class="calculator">
+            <!-- Length Converter -->
+            <div class="converter-section">
+                <h3>Length / Distance</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="length-from" placeholder="Enter value" step="any">
+                            <select id="length-from-unit">
+                                <option value="nm">Nanometers</option>
+                                <option value="μm">Micrometers</option>
+                                <option value="mm">Millimeters</option>
+                                <option value="cm">Centimeters</option>
+                                <option value="m" selected>Meters</option>
+                                <option value="km">Kilometers</option>
+                                <option value="in">Inches</option>
+                                <option value="ft">Feet</option>
+                                <option value="yd">Yards</option>
+                                <option value="mi">Miles</option>
+                                <option value="nmi">Nautical Miles</option>
+                                <option value="ly">Light Years</option>
+                                <option value="au">Astronomical Units</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="length-to-unit">
+                                <option value="nm">Nanometers</option>
+                                <option value="μm">Micrometers</option>
+                                <option value="mm">Millimeters</option>
+                                <option value="cm">Centimeters</option>
+                                <option value="m">Meters</option>
+                                <option value="km">Kilometers</option>
+                                <option value="in">Inches</option>
+                                <option value="ft" selected>Feet</option>
+                                <option value="yd">Yards</option>
+                                <option value="mi">Miles</option>
+                                <option value="nmi">Nautical Miles</option>
+                                <option value="ly">Light Years</option>
+                                <option value="au">Astronomical Units</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="length-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weight Converter -->
+            <div class="converter-section">
+                <h3>Weight / Mass</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="weight-from" placeholder="Enter value" step="any">
+                            <select id="weight-from-unit">
+                                <option value="mg">Milligrams</option>
+                                <option value="g">Grams</option>
+                                <option value="kg" selected>Kilograms</option>
+                                <option value="oz">Ounces</option>
+                                <option value="lb">Pounds</option>
+                                <option value="st">Stones</option>
+                                <option value="t">Tons (Metric)</option>
+                                <option value="us-ton">Tons (US)</option>
+                                <option value="uk-ton">Tons (UK)</option>
+                                <option value="ct">Carats</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="weight-to-unit">
+                                <option value="mg">Milligrams</option>
+                                <option value="g">Grams</option>
+                                <option value="kg">Kilograms</option>
+                                <option value="oz">Ounces</option>
+                                <option value="lb" selected>Pounds</option>
+                                <option value="st">Stones</option>
+                                <option value="t">Tons (Metric)</option>
+                                <option value="us-ton">Tons (US)</option>
+                                <option value="uk-ton">Tons (UK)</option>
+                                <option value="ct">Carats</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="weight-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Temperature Converter -->
+            <div class="converter-section">
+                <h3>Temperature</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="temp-from" placeholder="Enter value" step="any">
+                            <select id="temp-from-unit">
+                                <option value="c" selected>Celsius</option>
+                                <option value="f">Fahrenheit</option>
+                                <option value="k">Kelvin</option>
+                                <option value="r">Rankine</option>
+                                <option value="re">Réaumur</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="temp-to-unit">
+                                <option value="c">Celsius</option>
+                                <option value="f" selected>Fahrenheit</option>
+                                <option value="k">Kelvin</option>
+                                <option value="r">Rankine</option>
+                                <option value="re">Réaumur</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="temp-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Volume Converter -->
+            <div class="converter-section">
+                <h3>Volume / Capacity</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="volume-from" placeholder="Enter value" step="any">
+                            <select id="volume-from-unit">
+                                <option value="ml">Milliliters</option>
+                                <option value="l" selected>Liters</option>
+                                <option value="m3">Cubic Meters</option>
+                                <option value="tsp">Teaspoons</option>
+                                <option value="tbsp">Tablespoons</option>
+                                <option value="cup">Cups (US)</option>
+                                <option value="pt">Pints (US)</option>
+                                <option value="qt">Quarts (US)</option>
+                                <option value="gal">Gallons (US)</option>
+                                <option value="floz">Fluid Ounces (US)</option>
+                                <option value="imp-pt">Pints (Imperial)</option>
+                                <option value="imp-gal">Gallons (Imperial)</option>
+                                <option value="bbl">Barrels (Oil)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="volume-to-unit">
+                                <option value="ml">Milliliters</option>
+                                <option value="l">Liters</option>
+                                <option value="m3">Cubic Meters</option>
+                                <option value="tsp">Teaspoons</option>
+                                <option value="tbsp">Tablespoons</option>
+                                <option value="cup" selected>Cups (US)</option>
+                                <option value="pt">Pints (US)</option>
+                                <option value="qt">Quarts (US)</option>
+                                <option value="gal">Gallons (US)</option>
+                                <option value="floz">Fluid Ounces (US)</option>
+                                <option value="imp-pt">Pints (Imperial)</option>
+                                <option value="imp-gal">Gallons (Imperial)</option>
+                                <option value="bbl">Barrels (Oil)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="volume-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Area Converter -->
+            <div class="converter-section">
+                <h3>Area</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="area-from" placeholder="Enter value" step="any">
+                            <select id="area-from-unit">
+                                <option value="mm2">Square Millimeters</option>
+                                <option value="cm2">Square Centimeters</option>
+                                <option value="m2" selected>Square Meters</option>
+                                <option value="km2">Square Kilometers</option>
+                                <option value="in2">Square Inches</option>
+                                <option value="ft2">Square Feet</option>
+                                <option value="yd2">Square Yards</option>
+                                <option value="acre">Acres</option>
+                                <option value="ha">Hectares</option>
+                                <option value="mi2">Square Miles</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="area-to-unit">
+                                <option value="mm2">Square Millimeters</option>
+                                <option value="cm2">Square Centimeters</option>
+                                <option value="m2">Square Meters</option>
+                                <option value="km2">Square Kilometers</option>
+                                <option value="in2">Square Inches</option>
+                                <option value="ft2" selected>Square Feet</option>
+                                <option value="yd2">Square Yards</option>
+                                <option value="acre">Acres</option>
+                                <option value="ha">Hectares</option>
+                                <option value="mi2">Square Miles</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="area-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Converter -->
+            <div class="converter-section">
+                <h3>Time</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="time-from" placeholder="Enter value" step="any">
+                            <select id="time-from-unit">
+                                <option value="ns">Nanoseconds</option>
+                                <option value="μs">Microseconds</option>
+                                <option value="ms">Milliseconds</option>
+                                <option value="s" selected>Seconds</option>
+                                <option value="min">Minutes</option>
+                                <option value="h">Hours</option>
+                                <option value="d">Days</option>
+                                <option value="w">Weeks</option>
+                                <option value="mo">Months</option>
+                                <option value="y">Years</option>
+                                <option value="decade">Decades</option>
+                                <option value="century">Centuries</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="time-to-unit">
+                                <option value="ns">Nanoseconds</option>
+                                <option value="μs">Microseconds</option>
+                                <option value="ms">Milliseconds</option>
+                                <option value="s">Seconds</option>
+                                <option value="min" selected>Minutes</option>
+                                <option value="h">Hours</option>
+                                <option value="d">Days</option>
+                                <option value="w">Weeks</option>
+                                <option value="mo">Months</option>
+                                <option value="y">Years</option>
+                                <option value="decade">Decades</option>
+                                <option value="century">Centuries</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="time-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Speed Converter -->
+            <div class="converter-section">
+                <h3>Speed / Velocity</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="speed-from" placeholder="Enter value" step="any">
+                            <select id="speed-from-unit">
+                                <option value="ms">Meters per Second</option>
+                                <option value="kmh" selected>Kilometers per Hour</option>
+                                <option value="mph">Miles per Hour</option>
+                                <option value="fps">Feet per Second</option>
+                                <option value="kn">Knots</option>
+                                <option value="mach">Mach</option>
+                                <option value="c">Speed of Light</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="speed-to-unit">
+                                <option value="ms">Meters per Second</option>
+                                <option value="kmh">Kilometers per Hour</option>
+                                <option value="mph" selected>Miles per Hour</option>
+                                <option value="fps">Feet per Second</option>
+                                <option value="kn">Knots</option>
+                                <option value="mach">Mach</option>
+                                <option value="c">Speed of Light</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="speed-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Energy Converter -->
+            <div class="converter-section">
+                <h3>Energy</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="energy-from" placeholder="Enter value" step="any">
+                            <select id="energy-from-unit">
+                                <option value="j" selected>Joules</option>
+                                <option value="kj">Kilojoules</option>
+                                <option value="cal">Calories</option>
+                                <option value="kcal">Kilocalories</option>
+                                <option value="wh">Watt-hours</option>
+                                <option value="kwh">Kilowatt-hours</option>
+                                <option value="btu">BTU</option>
+                                <option value="ft-lb">Foot-pounds</option>
+                                <option value="ev">Electron Volts</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="energy-to-unit">
+                                <option value="j">Joules</option>
+                                <option value="kj">Kilojoules</option>
+                                <option value="cal">Calories</option>
+                                <option value="kcal" selected>Kilocalories</option>
+                                <option value="wh">Watt-hours</option>
+                                <option value="kwh">Kilowatt-hours</option>
+                                <option value="btu">BTU</option>
+                                <option value="ft-lb">Foot-pounds</option>
+                                <option value="ev">Electron Volts</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="energy-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Power Converter -->
+            <div class="converter-section">
+                <h3>Power</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="power-from" placeholder="Enter value" step="any">
+                            <select id="power-from-unit">
+                                <option value="w" selected>Watts</option>
+                                <option value="kw">Kilowatts</option>
+                                <option value="mw">Megawatts</option>
+                                <option value="hp">Horsepower</option>
+                                <option value="ps">Metric Horsepower</option>
+                                <option value="btu-h">BTU per Hour</option>
+                                <option value="ft-lb-s">Foot-pounds per Second</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="power-to-unit">
+                                <option value="w">Watts</option>
+                                <option value="kw">Kilowatts</option>
+                                <option value="mw">Megawatts</option>
+                                <option value="hp" selected>Horsepower</option>
+                                <option value="ps">Metric Horsepower</option>
+                                <option value="btu-h">BTU per Hour</option>
+                                <option value="ft-lb-s">Foot-pounds per Second</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="power-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pressure Converter -->
+            <div class="converter-section">
+                <h3>Pressure</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="pressure-from" placeholder="Enter value" step="any">
+                            <select id="pressure-from-unit">
+                                <option value="pa" selected>Pascals</option>
+                                <option value="kpa">Kilopascals</option>
+                                <option value="mpa">Megapascals</option>
+                                <option value="bar">Bar</option>
+                                <option value="atm">Atmospheres</option>
+                                <option value="psi">PSI</option>
+                                <option value="mmhg">mmHg</option>
+                                <option value="inhg">inHg</option>
+                                <option value="torr">Torr</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="pressure-to-unit">
+                                <option value="pa">Pascals</option>
+                                <option value="kpa">Kilopascals</option>
+                                <option value="mpa">Megapascals</option>
+                                <option value="bar">Bar</option>
+                                <option value="atm">Atmospheres</option>
+                                <option value="psi" selected>PSI</option>
+                                <option value="mmhg">mmHg</option>
+                                <option value="inhg">inHg</option>
+                                <option value="torr">Torr</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="pressure-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frequency Converter -->
+            <div class="converter-section">
+                <h3>Frequency</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="frequency-from" placeholder="Enter value" step="any">
+                            <select id="frequency-from-unit">
+                                <option value="hz" selected>Hertz</option>
+                                <option value="khz">Kilohertz</option>
+                                <option value="mhz">Megahertz</option>
+                                <option value="ghz">Gigahertz</option>
+                                <option value="thz">Terahertz</option>
+                                <option value="rpm">RPM</option>
+                                <option value="rps">Radians per Second</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="frequency-to-unit">
+                                <option value="hz">Hertz</option>
+                                <option value="khz" selected>Kilohertz</option>
+                                <option value="mhz">Megahertz</option>
+                                <option value="ghz">Gigahertz</option>
+                                <option value="thz">Terahertz</option>
+                                <option value="rpm">RPM</option>
+                                <option value="rps">Radians per Second</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="frequency-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Storage Converter -->
+            <div class="converter-section">
+                <h3>Data Storage</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="data-from" placeholder="Enter value" step="any">
+                            <select id="data-from-unit">
+                                <option value="bit">Bits</option>
+                                <option value="byte" selected>Bytes</option>
+                                <option value="kb">Kilobytes</option>
+                                <option value="mb">Megabytes</option>
+                                <option value="gb">Gigabytes</option>
+                                <option value="tb">Terabytes</option>
+                                <option value="pb">Petabytes</option>
+                                <option value="kib">Kibibytes</option>
+                                <option value="mib">Mebibytes</option>
+                                <option value="gib">Gibibytes</option>
+                                <option value="tib">Tebibytes</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="data-to-unit">
+                                <option value="bit">Bits</option>
+                                <option value="byte">Bytes</option>
+                                <option value="kb">Kilobytes</option>
+                                <option value="mb" selected>Megabytes</option>
+                                <option value="gb">Gigabytes</option>
+                                <option value="tb">Terabytes</option>
+                                <option value="pb">Petabytes</option>
+                                <option value="kib">Kibibytes</option>
+                                <option value="mib">Mebibytes</option>
+                                <option value="gib">Gibibytes</option>
+                                <option value="tib">Tebibytes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="data-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Angle Converter -->
+            <div class="converter-section">
+                <h3>Angle</h3>
+                <div class="converter-row">
+                    <div class="input-section">
+                        <div class="input-group">
+                            <label>From</label>
+                            <input type="number" id="angle-from" placeholder="Enter value" step="any">
+                            <select id="angle-from-unit">
+                                <option value="deg" selected>Degrees</option>
+                                <option value="rad">Radians</option>
+                                <option value="grad">Gradians</option>
+                                <option value="turn">Turns</option>
+                                <option value="arcmin">Arc Minutes</option>
+                                <option value="arcsec">Arc Seconds</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="angle-to-unit">
+                                <option value="deg">Degrees</option>
+                                <option value="rad" selected>Radians</option>
+                                <option value="grad">Gradians</option>
+                                <option value="turn">Turns</option>
+                                <option value="arcmin">Arc Minutes</option>
+                                <option value="arcsec">Arc Seconds</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="number" id="angle-to" class="result-input" readonly placeholder="Converted value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Conversion factors to base units
+        const conversions = {
+            length: {
+                nm: 1e-9,
+                μm: 1e-6,
+                mm: 0.001,
+                cm: 0.01,
+                m: 1,
+                km: 1000,
+                in: 0.0254,
+                ft: 0.3048,
+                yd: 0.9144,
+                mi: 1609.344,
+                nmi: 1852,
+                ly: 9.461e15,
+                au: 1.496e11
+            },
+            weight: {
+                mg: 0.000001,
+                g: 0.001,
+                kg: 1,
+                oz: 0.0283495,
+                lb: 0.453592,
+                st: 6.35029,
+                t: 1000,
+                'us-ton': 907.185,
+                'uk-ton': 1016.05,
+                ct: 0.0002
+            },
+            volume: {
+                ml: 0.001,
+                l: 1,
+                m3: 1000,
+                tsp: 0.00492892,
+                tbsp: 0.0147868,
+                cup: 0.236588,
+                pt: 0.473176,
+                qt: 0.946353,
+                gal: 3.78541,
+                floz: 0.0295735,
+                'imp-pt': 0.568261,
+                'imp-gal': 4.54609,
+                bbl: 158.987
+            },
+            area: {
+                mm2: 0.000001,
+                cm2: 0.0001,
+                m2: 1,
+                km2: 1000000,
+                in2: 0.00064516,
+                ft2: 0.092903,
+                yd2: 0.836127,
+                acre: 4046.86,
+                ha: 10000,
+                mi2: 2590000
+            },
+            time: {
+                ns: 1e-9,
+                μs: 1e-6,
+                ms: 0.001,
+                s: 1,
+                min: 60,
+                h: 3600,
+                d: 86400,
+                w: 604800,
+                mo: 2629746,
+                y: 31556952,
+                decade: 315569520,
+                century: 3155695200
+            },
+            speed: {
+                ms: 1,
+                kmh: 0.277778,
+                mph: 0.44704,
+                fps: 0.3048,
+                kn: 0.514444,
+                mach: 343,
+                c: 299792458
+            },
+            energy: {
+                j: 1,
+                kj: 1000,
+                cal: 4.184,
+                kcal: 4184,
+                wh: 3600,
+                kwh: 3600000,
+                btu: 1055.06,
+                'ft-lb': 1.35582,
+                ev: 1.602e-19
+            },
+            power: {
+                w: 1,
+                kw: 1000,
+                mw: 1000000,
+                hp: 745.7,
+                ps: 735.5,
+                'btu-h': 0.293071,
+                'ft-lb-s': 1.35582
+            },
+            pressure: {
+                pa: 1,
+                kpa: 1000,
+                mpa: 1000000,
+                bar: 100000,
+                atm: 101325,
+                psi: 6894.76,
+                mmhg: 133.322,
+                inhg: 3386.39,
+                torr: 133.322
+            },
+            frequency: {
+                hz: 1,
+                khz: 1000,
+                mhz: 1000000,
+                ghz: 1000000000,
+                thz: 1000000000000,
+                rpm: 1/60,
+                rps: 1/(2*Math.PI)
+            },
+            data: {
+                bit: 1/8,
+                byte: 1,
+                kb: 1000,
+                mb: 1000000,
+                gb: 1000000000,
+                tb: 1000000000000,
+                pb: 1000000000000000,
+                kib: 1024,
+                mib: 1048576,
+                gib: 1073741824,
+                tib: 1099511627776
+            },
+            angle: {
+                deg: 1,
+                rad: 180/Math.PI,
+                grad: 0.9,
+                turn: 360,
+                arcmin: 1/60,
+                arcsec: 1/3600
+            }
+        };
+
+        // Temperature conversion functions
+        function convertTemperature(value, fromUnit, toUnit) {
+            if (fromUnit === toUnit) return value;
+            
+            // Convert to Celsius first
+            let celsius;
+            switch (fromUnit) {
+                case 'c': celsius = value; break;
+                case 'f': celsius = (value - 32) * 5/9; break;
+                case 'k': celsius = value - 273.15; break;
+                case 'r': celsius = (value - 491.67) * 5/9; break;
+                case 're': celsius = value * 5/4; break;
+            }
+            
+            // Convert from Celsius to target unit
+            switch (toUnit) {
+                case 'c': return celsius;
+                case 'f': return celsius * 9/5 + 32;
+                case 'k': return celsius + 273.15;
+                case 'r': return celsius * 9/5 + 491.67;
+                case 're': return celsius * 4/5;
+            }
+        }
+
+        // Generic conversion function
+        function convert(value, fromUnit, toUnit, conversionTable) {
+            if (fromUnit === toUnit) return value;
+            
+            // Convert to base unit, then to target unit
+            const baseValue = value * conversionTable[fromUnit];
+            return baseValue / conversionTable[toUnit];
+        }
+
+        // Setup converters
+        function setupConverter(type) {
+            const fromInput = document.getElementById(`${type}-from`);
+            const toInput = document.getElementById(`${type}-to`);
+            const fromUnit = document.getElementById(`${type}-from-unit`);
+            const toUnit = document.getElementById(`${type}-to-unit`);
+
+            function updateConversion() {
+                const value = parseFloat(fromInput.value);
+                if (isNaN(value)) {
+                    toInput.value = '';
+                    return;
+                }
+
+                let result;
+                if (type === 'temp') {
+                    result = convertTemperature(value, fromUnit.value, toUnit.value);
+                } else {
+                    result = convert(value, fromUnit.value, toUnit.value, conversions[type]);
+                }
+
+                // Round to reasonable number of decimal places
+                toInput.value = Math.round(result * 1000000) / 1000000;
+            }
+
+            fromInput.addEventListener('input', updateConversion);
+            fromUnit.addEventListener('change', updateConversion);
+            toUnit.addEventListener('change', updateConversion);
+        }
+
+        // Initialize all converters
+        setupConverter('length');
+        setupConverter('weight');
+        setupConverter('temp');
+        setupConverter('volume');
+        setupConverter('area');
+        setupConverter('time');
+        setupConverter('speed');
+        setupConverter('energy');
+        setupConverter('power');
+        setupConverter('pressure');
+        setupConverter('frequency');
+        setupConverter('data');
+        setupConverter('angle');
+    </script>
+</body>
+</html>
